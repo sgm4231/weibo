@@ -7,6 +7,22 @@ use App\Models\User;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        //必须登陆才能访问
+        $this->middleware('auth',[
+            'except'=>['show','create','store']
+        ]);
+
+        //只让未登录用户访问登录页面
+        //Auth 中间件提供的 guest 选项，
+        //用于指定一些只允许未登录用户访问的动作，
+        //因此我们需要通过对 guest 属性进行设置，只让未登录用户访问登录页面和注册页面。
+        $this->middleware('guest', [
+            'only' => ['create']
+        ]);
+        
+    }
     public function create()
     {
         return view('users.create');
@@ -39,11 +55,18 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
+        //这里 update 是指授权类里的 update 授权方法，
+        //$user 对应传参 update 授权方法的第二个参数。
+        //正如上面定义 update 授权方法时候提起的，调用时，
+        //默认情况下，我们 不需要 传递第一个参数，
+        //也就是当前登录用户至该方法内，因为框架会自动加载当前登录用户。
+        $this->authorize('update', $user);
         return view('users.edit', compact('user'));
     }
 
     public function update(User $user, Request $request)
     {
+        $this->authorize('update', $user);
         $this->validate($request, [
             'name' => 'required|max:50',
             'password' => 'nullable|confirmed|min:6'
