@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="89b04668-deb6-4833-8dfe-b34a93d1f8bb" name="153" url="http://47.107.154.153">
+        <fileTransfer host="47.107.154.153" port="22" rootFolder="/www/wwwroot/weibo" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
