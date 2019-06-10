@@ -32,3 +32,10 @@ Route::resource('users', 'UsersController');
 //Route::patch('/users/{user}', 'UsersController@update')->name('users.update');
 //删除用户
 //Route::delete('/users/{user}', 'UsersController@destroy')->name('users.destroy');
+
+//显示登陆页面
+Route::get('login', 'SessionsController@create')->name('login');
+//创建新会话（登录）
+Route::post('login', 'SessionsController@store')->name('login');
+//销毁会话（退出登录）
+Route::delete('logout', 'SessionsController@destroy')->name('logout');
