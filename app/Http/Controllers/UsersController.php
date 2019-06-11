@@ -9,9 +9,9 @@ class UsersController extends Controller
 {
     public function __construct()
     {
-        //必须登陆才能访问
+        //除了以下几个都必须登陆才能访问
         $this->middleware('auth',[
-            'except'=>['show','create','store']
+            'except' => ['show', 'create', 'store', 'index']
         ]);
 
         //只让未登录用户访问登录页面
@@ -83,4 +83,12 @@ class UsersController extends Controller
 
         return redirect()->route('users.show', $user);
     }
+
+
+    public function index()
+    {
+        $users = User::paginate(10);
+        return view('users.index', compact('users'));
+    }
+
 }
