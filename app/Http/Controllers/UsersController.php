@@ -91,4 +91,14 @@ class UsersController extends Controller
         return view('users.index', compact('users'));
     }
 
+    public function destroy(User $user)
+    {
+        //在删除动作的授权中，我们规定只有当前用户为管理员，且被删除用户不是自己时，授权才能通过
+        $this->authorize('destroy', $user);
+
+        $user->delete();
+        session()->flash('success', '成功删除用户！');
+        return back();
+    }
+
 }
