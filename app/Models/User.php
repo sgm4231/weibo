@@ -78,6 +78,47 @@ class User extends Authenticatable
     }
 
 
+    //belongsToMany 方法的第三个参数 user_id 是定义在关联中的模型外键名，
+    //而第四个参数 follower_id 则是要合并的模型外键名
+    //我们可以通过 followers 来获取粉丝关系列表，如：$user->followers();
+    public function followers()
+    {
+        return $this->belongsToMany(User::Class, 'followers', 'user_id', 'follower_id');
+    }
+    //通过 followings 来获取用户关注人列表，如：$user->followings();
+    public function followings()
+    {
+        return $this->belongsToMany(User::Class, 'followers', 'follower_id', 'user_id');
+    }
+
+    //借助这两个方法可以让我们非常简单的实现用户的「关注」和「取消关注」的相关逻辑，
+    //具体在用户模型中定义关注（follow）和取消关注（unfollow）的方法如下：
+    public function follow($user_ids)
+    {
+        if ( ! is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->sync($user_ids, false);
+    }
+
+    public function unfollow($user_ids)
+    {
+        if ( ! is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->detach($user_ids);
+    }
+
+
+    //方法用于判断当前登录的用户 A 是否关注了用户 B，代码实现逻辑很简单，
+    //我们只需判断用户 B 是否包含在用户 A 的关注人列表上即可。
+    //这里我们将用到 contains 方法来做判断
+    public function isFollowing($user_id)
+    {
+        return $this->followings->contains($user_id);
+    }
+
+
 
 
 }
